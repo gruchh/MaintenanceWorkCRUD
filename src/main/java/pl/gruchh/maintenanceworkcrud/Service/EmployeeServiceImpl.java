@@ -1,6 +1,7 @@
 package pl.gruchh.maintenanceworkcrud.Service;
 
 import org.springframework.stereotype.Service;
+import pl.gruchh.maintenanceworkcrud.Controller.DTO.WorksDto;
 import pl.gruchh.maintenanceworkcrud.Repository.EmployeeRepository;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Breakdown;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Employee;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class EmployeeServiceImpl implements  EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService{
 
     private final EmployeeRepository employeeRepository;
     private final WorkOrderRepository workOrderRepository;
@@ -51,7 +52,7 @@ public class EmployeeServiceImpl implements  EmployeeService{
         employee1.setBreakdownSet(Set.of(breakdown1, breakdown2));
 
         employee2.setName("Marcin");
-        employee2.setName("Sobota");
+        employee2.setSurname("Sobota");
         employee2.setDateOfEmployment(LocalDate.of(2021, 9, 01));
         employee2.setPhone(phone2);
         employee2.setBreakdownSet(Set.of(breakdown1));
@@ -81,25 +82,7 @@ public class EmployeeServiceImpl implements  EmployeeService{
     }
 
     @Override
-    public boolean saveNewWorkOrder(Employee newEmployee) {
-        return false;
-    }
-
-    @Override
-    public List<Employee> getAllWorkOrders() {
-        return null;
-    }
-
-    @Override
-    public void deleteWorkOrder(Long id) {
-    }
-
-    @Override
-    public void updateWorkOrder(Employee workOrder) {
-    }
-
-    @Override
-    public Employee findWorkOrderById(Long id) {
-        return null;
+    public List<WorksDto> getAllWorksSummary() {
+        return employeeRepository.getWorkOrderAndBreakdownDurationTime();
     }
 }
