@@ -1,6 +1,7 @@
 package pl.gruchh.maintenanceworkcrud.Service;
 
 import org.springframework.stereotype.Service;
+import pl.gruchh.maintenanceworkcrud.Controller.DTO.EmployeeDto;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.WorksDto;
 import pl.gruchh.maintenanceworkcrud.Repository.EmployeeRepository;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Breakdown;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final WorkOrderRepository workOrderRepository;
@@ -33,12 +34,12 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         Breakdown breakdown1 = new Breakdown();
         breakdown1.setTitle("Nieobsługiwany wyjątek w programie");
-        breakdown1.setBreakdownStartDate(LocalDate.of(2022, 03, 02));
+        breakdown1.setBreakdownStartDate(LocalDate.of(2022, 3, 2));
         breakdown1.setDurationTime(92L);
 
         Breakdown breakdown2 = new Breakdown();
         breakdown2.setTitle("Nieobsługiwany wyjątek w programie");
-        breakdown2.setBreakdownStartDate(LocalDate.of(2022, 03, 17));
+        breakdown2.setBreakdownStartDate(LocalDate.of(2022, 3, 17));
         breakdown2.setDurationTime(25L);
 
         Employee employee1 = new Employee();
@@ -46,14 +47,14 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         employee1.setName("Kuba");
         employee1.setSurname("Piątek");
-        employee1.setDateOfEmployment(LocalDate.of(2020, 2, 01));
+        employee1.setDateOfEmployment(LocalDate.of(2020, 2, 1));
         employee1.setSalary(BigDecimal.valueOf(5000));
         employee1.setPhone(phone1);
         employee1.setBreakdownSet(Set.of(breakdown1, breakdown2));
 
         employee2.setName("Marcin");
         employee2.setSurname("Sobota");
-        employee2.setDateOfEmployment(LocalDate.of(2021, 9, 01));
+        employee2.setDateOfEmployment(LocalDate.of(2021, 9, 1));
         employee2.setPhone(phone2);
         employee2.setBreakdownSet(Set.of(breakdown1));
 
@@ -84,5 +85,9 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public List<WorksDto> getAllWorksSummary() {
         return employeeRepository.getWorkOrderAndBreakdownDurationTime();
+    }
+
+    public List<Employee> getEmployeeList() {
+        return employeeRepository.findAll();
     }
 }
