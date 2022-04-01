@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.EmployeeDto;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeAlreadyExistsException;
+import pl.gruchh.maintenanceworkcrud.Exception.EmployeeNotFoundException;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Employee;
 import pl.gruchh.maintenanceworkcrud.Service.EmployeeService;
 
@@ -39,14 +40,27 @@ public class EmployeeRestController {
         return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
     }
 
+    @GetMapping("/employee/{id}")
+    public EmployeeDto getEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
+        Employee employee = employeeService.getEmployeeById(id);
+        return convertEmployeeToDto(employee);
+    }
+
     @ExceptionHandler(value = EmployeeAlreadyExistsException.class)
     public ResponseEntity<String> EmployeeAlreadyExistsException() {
         return new ResponseEntity<>("Employee already exists", HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = EmployeeNotFoundException.class)
+    public ResponseEntity<String> EmployeeNotFoundException() {
+        return new ResponseEntity<>("Employee not found", HttpStatus.CONFLICT);
     }
 
     private EmployeeDto convertEmployeeToDto(Employee employee) {
         return modelMapper.map(employee, EmployeeDto.class);
     }
 
-    private Employee convertDtoToEmployee (EmployeeDto employeeDto) {return modelMapper.map(employeeDto, Employee.class);}
+    private Employee convertDtoToEmployee(EmployeeDto employeeDto) {
+        return modelMapper.map(employeeDto, Employee.class);
+    }
 }

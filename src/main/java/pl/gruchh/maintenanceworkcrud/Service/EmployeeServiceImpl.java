@@ -3,6 +3,7 @@ package pl.gruchh.maintenanceworkcrud.Service;
 import org.springframework.stereotype.Service;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.WorksDto;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeAlreadyExistsException;
+import pl.gruchh.maintenanceworkcrud.Exception.EmployeeNotFoundException;
 import pl.gruchh.maintenanceworkcrud.Repository.EmployeeRepository;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Breakdown;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Employee;
@@ -93,12 +94,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee saveNewEmployee(Employee newEmployee) {
-        if(employeeRepository.existsEmployeeByNameAndSurname(newEmployee.getName(), newEmployee.getSurname())) {
+        if (employeeRepository.existsEmployeeByNameAndSurname(newEmployee.getName(), newEmployee.getSurname()))
             throw new EmployeeAlreadyExistsException();
-        }
         employeeRepository.save(newEmployee);
 
         return newEmployee;
+    }
+
+    @Override
+    public Employee getEmployeeById(Long id) throws EmployeeNotFoundException {
+        Employee employee;
+
+        if (employeeRepository.findById(id).isEmpty()) {
+            throw new EmployeeNotFoundException();
+        } else {
+            employee = employeeRepository.findById(id).get();
+        }
+        return employee;
     }
 
 }

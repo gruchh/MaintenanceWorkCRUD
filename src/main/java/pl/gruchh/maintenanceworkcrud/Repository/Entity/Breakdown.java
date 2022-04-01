@@ -17,6 +17,10 @@ public class Breakdown {
     private LocalDate breakdownStartDate;
     private Long durationTime;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

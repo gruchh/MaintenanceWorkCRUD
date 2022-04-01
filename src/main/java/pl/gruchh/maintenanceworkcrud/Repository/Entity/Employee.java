@@ -29,6 +29,14 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private Set<WorkOrder> workOrder;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }

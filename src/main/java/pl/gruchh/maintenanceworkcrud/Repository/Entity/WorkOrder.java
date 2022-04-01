@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="WorkOrders")
+@Table(name = "WorkOrders")
 public class WorkOrder {
 
     @Id
@@ -19,8 +19,12 @@ public class WorkOrder {
     private Long durationTime;
 
     @ManyToOne
-    @JoinColumn(name="employee_FK")
+    @JoinColumn(name = "employee_FK")
     private Employee employee;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Employee getEmployee() {
         return employee;
