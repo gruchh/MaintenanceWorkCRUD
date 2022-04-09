@@ -1,49 +1,43 @@
 package pl.gruchh.maintenanceworkcrud.Controller;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.EmployeeDto;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeAlreadyExistsException;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeNotFoundException;
+import pl.gruchh.maintenanceworkcrud.Mapper.EmployeeMapper;
+import pl.gruchh.maintenanceworkcrud.Mapper.EmployeeMapperImpl;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Employee;
 import pl.gruchh.maintenanceworkcrud.Service.EmployeeService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
 public class EmployeeRestController {
 
     private final EmployeeService employeeService;
-    private final ModelMapper modelMapper;
 
-    public EmployeeRestController(EmployeeService employeeService, ModelMapper modelMapper) {
+    public EmployeeRestController(EmployeeService employeeService) {
         this.employeeService = employeeService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/employees")
     public List<EmployeeDto> getAllEmployeesList() {
-        List<Employee> employees = employeeService.getEmployeeList();
-        return employees.stream()
-                .map(this::convertEmployeeToDto)
-                .collect(Collectors.toList());
+        return employeeService.getEmployeeList();
     }
 
-    @PostMapping("/employee")
+    @PostMapping("/addNewEmployee")
     public ResponseEntity saveEmployee(@RequestBody EmployeeDto employeeDto) throws EmployeeAlreadyExistsException {
-        Employee employee = convertDtoToEmployee(employeeDto);
-        Employee newEmployee = employeeService.saveNewEmployee(employee);
+        EmployeeDto newEmployee = employeeService.saveNewEmployee(employeeDto);
         return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
     }
 
+
     @GetMapping("/employee/{id}")
     public EmployeeDto getEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
-        Employee employee = employeeService.getEmployeeById(id);
-        return convertEmployeeToDto(employee);
+        return employeeService.getEmployeeById(id);
     }
 
     @ExceptionHandler(value = EmployeeAlreadyExistsException.class)
@@ -56,11 +50,4 @@ public class EmployeeRestController {
         return new ResponseEntity<>("Employee not found", HttpStatus.CONFLICT);
     }
 
-    private EmployeeDto convertEmployeeToDto(Employee employee) {
-        return modelMapper.map(employee, EmployeeDto.class);
-    }
-
-    private Employee convertDtoToEmployee(EmployeeDto employeeDto) {
-        return modelMapper.map(employeeDto, Employee.class);
-    }
 }

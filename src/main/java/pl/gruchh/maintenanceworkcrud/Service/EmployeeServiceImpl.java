@@ -1,9 +1,11 @@
 package pl.gruchh.maintenanceworkcrud.Service;
 
 import org.springframework.stereotype.Service;
+import pl.gruchh.maintenanceworkcrud.Controller.DTO.EmployeeDto;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.WorksDto;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeAlreadyExistsException;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeNotFoundException;
+import pl.gruchh.maintenanceworkcrud.Mapper.EmployeeMapperImpl;
 import pl.gruchh.maintenanceworkcrud.Repository.EmployeeRepository;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Breakdown;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Employee;
@@ -16,16 +18,19 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final WorkOrderRepository workOrderRepository;
+    private final EmployeeMapperImpl employeeMapper;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, WorkOrderRepository workOrderRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, WorkOrderRepository workOrderRepository, EmployeeMapperImpl employeeMapper) {
         this.employeeRepository = employeeRepository;
         this.workOrderRepository = workOrderRepository;
+        this.employeeMapper = employeeMapper;
 
         Phone phone1 = new Phone();
         phone1.setNumber(500123456L);
@@ -88,21 +93,26 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.getWorkOrderAndBreakdownDurationTime();
     }
 
-    public List<Employee> getEmployeeList() {
-        return employeeRepository.findAll();
+    public List<EmployeeDto> getEmployeeList() {
+        List<EmployeeDto> employeeDtoList = null;
+
+        List<Employee> allEmployeeList = employeeRepository.findAll();
+        employeeDtoList = allEmployeeList.stream().map(employee -> employeeMapper.convertEmployeeToDto(employee)).collect(Collectors.toList());
+
+        return employeeDtoList;
     }
 
     @Override
-    public Employee saveNewEmployee(Employee newEmployee) {
+    public EmployeeDto saveNewEmployee(EmployeeDto newEmployee) {
         if (employeeRepository.existsEmployeeByNameAndSurname(newEmployee.getName(), newEmployee.getSurname()))
             throw new EmployeeAlreadyExistsException();
-        employeeRepository.save(newEmployee);
+        employeeRepository.save(employeeMapper.convertDtoToEmployee(newEmployee));
 
         return newEmployee;
     }
 
     @Override
-    public Employee getEmployeeById(Long id) throws EmployeeNotFoundException {
+    public EmployeeDto getEmployeeById(Long id) throws EmployeeNotFoundException {
         Employee employee;
 
         if (employeeRepository.findById(id).isEmpty()) {
@@ -110,7 +120,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         } else {
             employee = employeeRepository.findById(id).get();
         }
-        return employee;
+        return employeeMapper.convertEmployeeToDto(employee);
     }
 
 }
