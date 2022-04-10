@@ -61,6 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee2.setName("Marcin");
         employee2.setSurname("Sobota");
         employee2.setDateOfEmployment(LocalDate.of(2021, 9, 1));
+        employee2.setSalary(BigDecimal.valueOf(4600));
         employee2.setPhone(phone2);
         employee2.setBreakdownSet(Set.of(breakdown1));
 
@@ -107,7 +108,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employeeRepository.existsEmployeeByNameAndSurname(newEmployee.getName(), newEmployee.getSurname()))
             throw new EmployeeAlreadyExistsException();
         employeeRepository.save(employeeMapper.convertDtoToEmployee(newEmployee));
-
         return newEmployee;
     }
 

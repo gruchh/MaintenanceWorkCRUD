@@ -6,11 +6,11 @@ $(document).ready(function () {
 
     function changeForm() {
 
-        var url = "/forms/";
+        var url = "";
         if ($('#selection').val() === "Content 1") {
-            url = "AddEmployee";
+            url = "/addNewEmployee";
         } else if ($('#selection').val() === "Content 2") {
-            url = "RemoveEmployee";
+            url = "/forms/RemoveEmployee";
         }
 
         $('#replace_div').load(url);

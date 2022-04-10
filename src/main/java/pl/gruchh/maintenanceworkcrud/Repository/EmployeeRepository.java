@@ -17,8 +17,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "join employee.breakdownSet breakdown group by employee.name")
     List<WorksDto> getWorkOrderAndBreakdownDurationTime();
 
-    @Query(value = "select employee from Employee employee WHERE employee.name = ?1 and employee.surname = ?2")
-
     boolean existsEmployeeByNameAndSurname(String name, String Surname);
 
 }

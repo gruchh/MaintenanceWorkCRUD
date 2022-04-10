@@ -36,6 +36,13 @@ public class EmployeeController {
         return "index";
     }
 
+    @GetMapping("/addNewEmployee")
+    public String getContent1( Model model) {
+        EmployeeDto employeeDto = new EmployeeDto();
+        model.addAttribute("Employee", employeeDto);
+        return "forms/ajax/AddForm";
+    }
+
     @PostMapping("/addNewEmployee")
     public String saveEmployee(@Valid EmployeeDto employeeDto) throws EmployeeAlreadyExistsException {
         EmployeeDto newEmployee = employeeService.saveNewEmployee(employeeDto);
