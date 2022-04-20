@@ -14,5 +14,6 @@ public interface EmployeeService {
     List<EmployeeDto> getEmployeeList();
     EmployeeDto saveNewEmployee(EmployeeDto newEmployee) throws EmployeeAlreadyExistsException;
     EmployeeDto getEmployeeById(Long id) throws EmployeeNotFoundException;
+    void deleteEmployeeById(Long id) throws EmployeeNotFoundException;
 
 }

@@ -34,20 +34,9 @@ public class EmployeeRestController {
         return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
     }
 
-
     @GetMapping("/employee/{id}")
     public EmployeeDto getEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
         return employeeService.getEmployeeById(id);
-    }
-
-    @ExceptionHandler(value = EmployeeAlreadyExistsException.class)
-    public ResponseEntity<String> EmployeeAlreadyExistsException() {
-        return new ResponseEntity<>("Employee already exists", HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(value = EmployeeNotFoundException.class)
-    public ResponseEntity<String> EmployeeNotFoundException() {
-        return new ResponseEntity<>("Employee not found", HttpStatus.CONFLICT);
     }
 
 }

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org" xmlns:format="http://www.w3.org/1999/xhtml">
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,17 +20,29 @@
 <div class="container-sm">
 
     <div th:replace="fragments/header :: header"></div>
+    <h1>Employees</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Date of employment</th>
+            <th scope="col">Salary</th>
+            <th scope="col">ACTION</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${allEmployees}">
+            <td th:text="${employee.getName()}">
+            <td th:text="${employee.getSurname()}">
+            <td th:text="${employee.getDateOfEmployment()}">
+            <td th:text="${employee.getSalary()}">
+            <th><a type="button submit">EDIT</a></th>
+        </tr>
+        </tbody>
+    </table>
 
-    <select id="selection" class="form-select" aria-label="Default select example">
-        <option>Content 1</option>
-        <option>Content 2</option>
-    </select>
-
-    <div id="replace_div">
-        Content goes here
-    </div>
 </div>
 
 </body>
 </html>
-

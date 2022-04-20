@@ -50,6 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee employee1 = new Employee();
         Employee employee2 = new Employee();
+        Employee employee3 = new Employee();
 
         employee1.setName("Kuba");
         employee1.setSurname("Piątek");
@@ -64,6 +65,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee2.setSalary(BigDecimal.valueOf(4600));
         employee2.setPhone(phone2);
         employee2.setBreakdownSet(Set.of(breakdown1));
+
+        employee3.setName("Tadeusz");
+        employee3.setSurname("Wtorek");
 
         WorkOrder workOrder1 = new WorkOrder();
         workOrder1.setTitle("Obchód");
@@ -83,7 +87,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         workOrder3.setDurationTime(50L);
         workOrder3.setEmployee(employee2);
 
-        employeeRepository.saveAll(Arrays.asList(employee1, employee2));
+        employeeRepository.saveAll(Arrays.asList(employee1, employee2, employee3));
         workOrderRepository.saveAll(Arrays.asList(workOrder1, workOrder2, workOrder3));
 
         System.out.println(employeeRepository.getWorkOrderAndBreakdownDurationTime());
@@ -121,6 +125,17 @@ public class EmployeeServiceImpl implements EmployeeService {
             employee = employeeRepository.findById(id).get();
         }
         return employeeMapper.convertEmployeeToDto(employee);
+    }
+
+    @Override
+    public void deleteEmployeeById(Long id) throws EmployeeNotFoundException {
+
+        if (employeeRepository.findById(id).isEmpty()) {
+            throw new EmployeeNotFoundException();
+        } else {
+            employeeRepository.deleteById(id);
+        }
+
     }
 
 }
