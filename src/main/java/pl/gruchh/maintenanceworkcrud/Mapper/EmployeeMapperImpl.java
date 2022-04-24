@@ -1,7 +1,6 @@
 package pl.gruchh.maintenanceworkcrud.Mapper;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.EmployeeDto;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Employee;

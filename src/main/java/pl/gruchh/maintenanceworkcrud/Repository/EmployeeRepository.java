@@ -18,5 +18,4 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<WorksDto> getWorkOrderAndBreakdownDurationTime();
 
     boolean existsEmployeeByNameAndSurname(String name, String Surname);
-    Employee getEmployeeByNameAndSurname(String name, String Surname);
 }

@@ -16,5 +16,4 @@ public interface EmployeeService {
     EmployeeDto saveNewEmployee(EmployeeDto newEmployee) throws EmployeeAlreadyExistsException;
     EmployeeDto getEmployeeById(Long id) throws EmployeeNotFoundException;
     EmployeeDto editEmployee (Long id, EmployeeDto editedEmployeeDto);
-    EmployeeDto findById(Long id) throws EmployeeNotFoundException;
 }

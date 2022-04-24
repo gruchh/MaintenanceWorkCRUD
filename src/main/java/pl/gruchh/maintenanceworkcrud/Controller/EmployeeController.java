@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.EmployeeDto;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.WorksDto;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeAlreadyExistsException;
-import pl.gruchh.maintenanceworkcrud.Mapper.EmployeeMapper;
 import pl.gruchh.maintenanceworkcrud.Service.EmployeeService;
 
 import javax.validation.Valid;
@@ -17,11 +16,9 @@ import java.util.List;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
-    private final EmployeeMapper employeeMapper;
 
-    public EmployeeController(EmployeeService employeeService, EmployeeMapper employeeMapper) {
+    public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
-        this.employeeMapper = employeeMapper;
     }
 
     @GetMapping("/work-summary")
@@ -40,7 +37,7 @@ public class EmployeeController {
 
     @PostMapping()
     public String saveEmployee(@Valid EmployeeDto employeeDto) throws EmployeeAlreadyExistsException {
-        EmployeeDto newEmployee = employeeService.saveNewEmployee(employeeDto);
+        employeeService.saveNewEmployee(employeeDto);
         return "redirect:/";
     }
 

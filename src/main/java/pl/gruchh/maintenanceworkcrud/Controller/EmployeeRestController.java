@@ -6,9 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.EmployeeDto;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeAlreadyExistsException;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeNotFoundException;
-import pl.gruchh.maintenanceworkcrud.Mapper.EmployeeMapper;
-import pl.gruchh.maintenanceworkcrud.Mapper.EmployeeMapperImpl;
-import pl.gruchh.maintenanceworkcrud.Repository.Entity.Employee;
 import pl.gruchh.maintenanceworkcrud.Service.EmployeeService;
 
 import java.util.List;
@@ -29,7 +26,7 @@ public class EmployeeRestController {
     }
 
     @PostMapping()
-    public ResponseEntity saveEmployee(@RequestBody EmployeeDto employeeDto) throws EmployeeAlreadyExistsException {
+    public ResponseEntity<EmployeeDto> saveEmployee(@RequestBody EmployeeDto employeeDto) throws EmployeeAlreadyExistsException {
         EmployeeDto newEmployee = employeeService.saveNewEmployee(employeeDto);
         return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
     }
@@ -40,7 +37,7 @@ public class EmployeeRestController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity editEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDto employeeDto) {
+    public ResponseEntity<EmployeeDto> editEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDto employeeDto) {
         EmployeeDto newEmployee = employeeService.editEmployee(id, employeeDto);
         return new ResponseEntity<>(newEmployee, HttpStatus.OK);
     }

@@ -102,7 +102,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeDto> getEmployeeList() {
         List<EmployeeDto> employeeDtos;
         List<Employee> allEmployeeList = employeeRepository.findAll();
-        employeeDtos = allEmployeeList.stream().map(employee -> employeeMapper.convertEmployeeToDto(employee)).collect(Collectors.toList());
+        employeeDtos = allEmployeeList.stream().map(employeeMapper::convertEmployeeToDto).collect(Collectors.toList());
 
         return employeeDtos;
     }
@@ -117,20 +117,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto getEmployeeById(Long id) throws EmployeeNotFoundException {
-        Employee employee;
+        Employee employee = employeeRepository.findById(id).orElseThrow(EmployeeNotFoundException::new);
 
-        if (employeeRepository.findById(id).isEmpty()) {
-            throw new EmployeeNotFoundException();
-        } else {
-            employee = employeeRepository.findById(id).get();
-        }
         return employeeMapper.convertEmployeeToDto(employee);
     }
 
     @Override
     public EmployeeDto editEmployee(Long id, EmployeeDto editedEmployeeDto) throws EmployeeNotFoundException {
 
-        Employee editedEmployeeInDb = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException());
+        Employee editedEmployeeInDb = employeeRepository.findById(id).orElseThrow(EmployeeNotFoundException::new);
         Employee editedEmployee = employeeMapper.convertDtoToEmployee(editedEmployeeDto);
 
         String editedEmployeeName = editedEmployeeDto.getName();
@@ -143,19 +138,5 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(editedEmployee);
         return editedEmployeeDto;
 }
-
-    @Override
-    public EmployeeDto findById(Long id) throws EmployeeNotFoundException {
-
-        Employee employee;
-
-        if (employeeRepository.findById(id).isEmpty()) {
-            throw new EmployeeNotFoundException();
-        } else {
-            employee = employeeRepository.findById(id).get();
-        }
-
-        return employeeMapper.convertEmployeeToDto(employee);
-    }
 
 }
