@@ -7,6 +7,7 @@ import pl.gruchh.maintenanceworkcrud.Exception.EmployeeNotFoundException;
 import pl.gruchh.maintenanceworkcrud.Repository.Entity.Employee;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EmployeeService {
 
@@ -14,6 +15,6 @@ public interface EmployeeService {
     List<EmployeeDto> getEmployeeList();
     EmployeeDto saveNewEmployee(EmployeeDto newEmployee) throws EmployeeAlreadyExistsException;
     EmployeeDto getEmployeeById(Long id) throws EmployeeNotFoundException;
-    void deleteEmployeeById(Long id) throws EmployeeNotFoundException;
-
+    EmployeeDto editEmployee (Long id, EmployeeDto editedEmployeeDto);
+    EmployeeDto findById(Long id) throws EmployeeNotFoundException;
 }

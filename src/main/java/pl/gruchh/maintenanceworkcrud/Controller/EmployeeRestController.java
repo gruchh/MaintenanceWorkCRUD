@@ -14,7 +14,7 @@ import pl.gruchh.maintenanceworkcrud.Service.EmployeeService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/employees")
 public class EmployeeRestController {
 
     private final EmployeeService employeeService;
@@ -23,20 +23,27 @@ public class EmployeeRestController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/employees")
+    @GetMapping()
     public List<EmployeeDto> getAllEmployeesList() {
         return employeeService.getEmployeeList();
     }
 
-    @PostMapping("/addNewEmployee")
+    @PostMapping()
     public ResponseEntity saveEmployee(@RequestBody EmployeeDto employeeDto) throws EmployeeAlreadyExistsException {
         EmployeeDto newEmployee = employeeService.saveNewEmployee(employeeDto);
         return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
     }
 
-    @GetMapping("/employee/{id}")
+    @GetMapping("/{id}")
     public EmployeeDto getEmployeeById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
         return employeeService.getEmployeeById(id);
     }
+
+    @PostMapping("/{id}")
+    public ResponseEntity editEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDto employeeDto) {
+        EmployeeDto newEmployee = employeeService.editEmployee(id, employeeDto);
+        return new ResponseEntity<>(newEmployee, HttpStatus.OK);
+    }
+
 
 }

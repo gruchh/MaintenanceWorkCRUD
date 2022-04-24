@@ -2,10 +2,7 @@ package pl.gruchh.maintenanceworkcrud.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.EmployeeDto;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.WorksDto;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeAlreadyExistsException;
@@ -16,6 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
+@RequestMapping("/employees")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -26,37 +24,44 @@ public class EmployeeController {
         this.employeeMapper = employeeMapper;
     }
 
-    @GetMapping("/")
+    @GetMapping("/work-summary")
     public String getAllDurationTime(Model model) {
         List<WorksDto> allWorksSummary = employeeService.getAllWorksSummary();
         model.addAttribute("allWorksSummary", allWorksSummary);
         return "index";
     }
 
-    @GetMapping("/addNewEmployee")
+    @GetMapping()
     public String getNewEmployeeForm(Model model) {
         EmployeeDto employeeDto = new EmployeeDto();
         model.addAttribute("Employee", employeeDto);
         return "forms/AddForm";
     }
 
-    @PostMapping("/addNewEmployee")
+    @PostMapping()
     public String saveEmployee(@Valid EmployeeDto employeeDto) throws EmployeeAlreadyExistsException {
         EmployeeDto newEmployee = employeeService.saveNewEmployee(employeeDto);
         return "redirect:/";
     }
 
-    @GetMapping("/showAllEmployees")
-    public String getRemoveEmployeeForm(Model model) {
+    @GetMapping("/all-employees")
+    public String getAllEmployees(Model model) {
         List<EmployeeDto> allEmployees = employeeService.getEmployeeList();
         model.addAttribute("allEmployees", allEmployees);
-
         return "forms/AllEmployees";
     }
 
-    @GetMapping("/updateEmployee")
-    public String getUpdateEmployeeForm() {
-        return "forms/ajax/UpdateForm";
+    @GetMapping("/{id}")
+    public String getEmployeeForm(@PathVariable Long id, Model model) throws EmployeeAlreadyExistsException {
+        EmployeeDto employeeDto = employeeService.getEmployeeById(id);
+        model.addAttribute("Employee", employeeDto);
+        return "forms/EditForm";
+    }
+
+    @PostMapping("/{id}")
+    public String editEmployee(@PathVariable Long id, @Valid EmployeeDto employeeDto) {
+        employeeService.editEmployee(id, employeeDto);
+        return "redirect:/employees/all-employees";
     }
 
 }

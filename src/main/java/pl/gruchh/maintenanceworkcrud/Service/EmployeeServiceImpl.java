@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.EmployeeDto;
 import pl.gruchh.maintenanceworkcrud.Controller.DTO.WorksDto;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeAlreadyExistsException;
+import pl.gruchh.maintenanceworkcrud.Exception.EmployeeNameAndSurnameChanged;
 import pl.gruchh.maintenanceworkcrud.Exception.EmployeeNotFoundException;
 import pl.gruchh.maintenanceworkcrud.Mapper.EmployeeMapperImpl;
 import pl.gruchh.maintenanceworkcrud.Repository.EmployeeRepository;
@@ -99,12 +100,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public List<EmployeeDto> getEmployeeList() {
-        List<EmployeeDto> employeeDtoList = null;
-
+        List<EmployeeDto> employeeDtos;
         List<Employee> allEmployeeList = employeeRepository.findAll();
-        employeeDtoList = allEmployeeList.stream().map(employee -> employeeMapper.convertEmployeeToDto(employee)).collect(Collectors.toList());
+        employeeDtos = allEmployeeList.stream().map(employee -> employeeMapper.convertEmployeeToDto(employee)).collect(Collectors.toList());
 
-        return employeeDtoList;
+        return employeeDtos;
     }
 
     @Override
@@ -128,14 +128,34 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void deleteEmployeeById(Long id) throws EmployeeNotFoundException {
+    public EmployeeDto editEmployee(Long id, EmployeeDto editedEmployeeDto) throws EmployeeNotFoundException {
+
+        Employee editedEmployeeInDb = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException());
+        Employee editedEmployee = employeeMapper.convertDtoToEmployee(editedEmployeeDto);
+
+        String editedEmployeeName = editedEmployeeDto.getName();
+        String editedEmployeeSurname = editedEmployee.getSurname();
+
+        if (!editedEmployeeInDb.getName().equals(editedEmployeeName) || !editedEmployeeInDb.getSurname().equals(editedEmployeeSurname)) {
+                throw new EmployeeNameAndSurnameChanged();
+        }
+
+        employeeRepository.save(editedEmployee);
+        return editedEmployeeDto;
+}
+
+    @Override
+    public EmployeeDto findById(Long id) throws EmployeeNotFoundException {
+
+        Employee employee;
 
         if (employeeRepository.findById(id).isEmpty()) {
             throw new EmployeeNotFoundException();
         } else {
-            employeeRepository.deleteById(id);
+            employee = employeeRepository.findById(id).get();
         }
 
+        return employeeMapper.convertEmployeeToDto(employee);
     }
 
 }

@@ -37,7 +37,7 @@
             <td th:text="${employee.getSurname()}">
             <td th:text="${employee.getDateOfEmployment()}">
             <td th:text="${employee.getSalary()}">
-            <th><a type="button submit">EDIT</a></th>
+            <th><a type="button submit" th:href="@{/employees/{path}(path=${employee.id})}">EDIT</a></th>
         </tr>
         </tbody>
     </table>
