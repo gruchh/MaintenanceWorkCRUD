@@ -9,6 +9,7 @@ public class Phone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long number;
 
     @OneToOne(mappedBy = "phone")

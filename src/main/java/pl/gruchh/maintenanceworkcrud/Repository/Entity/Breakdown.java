@@ -12,9 +12,11 @@ public class Breakdown {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"dd.MM.yyyy"})
     private LocalDate breakdownStartDate;
+
     private Long durationTime;
 
     public void setId(Long id) {
