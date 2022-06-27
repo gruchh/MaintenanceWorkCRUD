@@ -12,10 +12,13 @@ public class WorkOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String Title;
+
     private int orderWeight;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"dd.MM.yyyy"})
     private LocalDate deadLineDate;
+
     private Long durationTime;
 
     @ManyToOne
